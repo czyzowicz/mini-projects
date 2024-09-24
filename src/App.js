@@ -1,25 +1,51 @@
-import logo from './logo.svg';
 import './App.css';
+import {Counter} from "./Counter";
+import {ToggleSwitch} from "./ToggleSwitch";
+import {ToDoList} from "./ToDoList";
+import {SearchBar} from "./SearchBar";
+import {useEffect, useState} from "react";
+import {UniList} from "./UniList";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    const [data, setData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [value, setValue] = useState('');
+
+    useEffect(() => {
+        fetch('http://universities.hipolabs.com/search?country=Poland')
+            .then(response => response.json())
+            .then(data => {
+                setData(data);
+                setLoading(false);
+            });
+    }, []);
+
+    if (loading) return <p>Loading...</p>
+
+     const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setValue(e.target.value);
+    }
+
+    const filteredData = data.filter(object => {
+        return object.name.toLowerCase().includes(value)
+    })
+
+
+    return (
+        <div className="App">
+            <Counter/>
+            <br/>
+            <ToggleSwitch/>
+            <br/>
+            <ToDoList />
+            <br/>
+            {/*<DataFetcher />*/}
+            <br/>
+            <SearchBar value={value} onChange={onChange} />
+            <br/>
+            <UniList list={filteredData} />
+        </div>
+    );
 }
 
 export default App;
