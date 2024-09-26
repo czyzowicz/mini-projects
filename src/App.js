@@ -5,11 +5,14 @@ import {ToDoList} from "./ToDoList";
 import {SearchBar} from "./SearchBar";
 import {useEffect, useState} from "react";
 import {UniList} from "./UniList";
+import {DropdownMenu} from "./DropdownMenu";
+import {CountdownTimer} from "./CountdownTimer";
 
 function App() {
     const [data, setData] = useState([]);
     const [loading, setLoading] = useState(true);
     const [value, setValue] = useState('');
+    const items = ['Item 1', 'Item 2', 'Item 3'];
 
     useEffect(() => {
         fetch('http://universities.hipolabs.com/search?country=Poland')
@@ -41,9 +44,14 @@ function App() {
             <br/>
             {/*<DataFetcher />*/}
             <br/>
+            <CountdownTimer initialSeconds={10}/>
+            <br/>
+            <DropdownMenu items={items} />
+            <br/>
             <SearchBar value={value} onChange={onChange} />
             <br/>
             <UniList list={filteredData} />
+            <br/>
         </div>
     );
 }
